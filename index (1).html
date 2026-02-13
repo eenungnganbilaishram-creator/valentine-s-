@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love ❤️</title>
+
+<style>
+
+/* ===== COLOR THEME ===== */
+:root {
+  --deep-wine: #3b0a0f;
+  --burgundy: #7a1c22;
+  --dark-red: #5b0f16;
+  --cream: #f5e6d8;
+  --gold: #d4af37;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  overflow: hidden;
+  background: var(--deep-wine);
+  color: var(--cream);
+}
+
+/* ===== PAGE SYSTEM ===== */
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+  transition: opacity 1s ease;
+}
+
+.page.active {
+  display: flex;
+  animation: fade 1s ease;
+}
+
+@keyframes fade {
+  from {opacity:0;}
+  to {opacity:1;}
+}
+
+/* ===== PAGE COLORS ===== */
+.page-dark { background: var(--deep-wine); }
+.page-burgundy { background: var(--burgundy); }
+.page-cream { background: var(--cream); color: var(--deep-wine); }
+
+/* ===== TEXT ===== */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* ===== BUTTONS ===== */
+button {
+  padding: 12px 25px;
+  margin: 10px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  background: var(--cream);
+  color: var(--deep-wine);
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background: var(--gold);
+}
+
+/* ===== TYPEWRITER ===== */
+#letterText {
+  max-width: 600px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  border-right: 2px solid var(--gold);
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%,100%{border-color:transparent;}
+  50%{border-color:var(--gold);}
+}
+
+/* ===== HEART STYLE ===== */
+.heart {
+  position: fixed;
+  font-size: 20px;
+  animation: floatUp 3s linear forwards;
+}
+
+@keyframes floatUp {
+  from {transform: translateY(0); opacity:1;}
+  to {transform: translateY(-600px); opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+<button onclick="toggleMusic()" style="position:fixed;top:10px;right:10px;">🎵</button>
+
+<!-- PAGE 1 -->
+<div class="page page-dark active" id="page1">
+  <h1>Happy Valentine's Day, my love ❤️</h1>
+  <button onclick="goToPage(2)">Next</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page page-burgundy" id="page2">
+  <h1>Do you love me, baby? 🫠</h1>
+  <button onclick="goToPage(3)">Yes 😆</button>
+  <button onclick="wrongAnswer()">No 😒</button>
+  <p id="wrongText"></p>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page page-dark" id="page3">
+  <h1>Will you be my Valentine, Nathan? ❤️</h1>
+  <button onclick="showLetter()">Yes 💕</button>
+  <button id="noBtn" onmouseover="moveButton()">No 😒</button>
+</div>
+
+<!-- PAGE 4 LETTER -->
+<div class="page page-cream" id="page4">
+  <h1>My Love Letter ❤️</h1>
+  <p id="letterText"></p>
+  <button onclick="goToPage(5)">Final Surprise ❤️</button>
+</div>
+
+<!-- PAGE 5 FINAL -->
+<div class="page page-burgundy" id="page5">
+  <h1 style="font-size:2.5rem;">I love you so much ❤️❤️❤️</h1>
+</div>
+
+<script>
+
+/* ===== PAGE SWITCH ===== */
+function goToPage(num){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById("page"+num).classList.add("active");
+
+  if(num === 5){
+    megaExplosion();
+  }
+}
+
+/* ===== WRONG ANSWER ===== */
+function wrongAnswer(){
+  document.getElementById("wrongText").innerText = "Wrong. Try again 🙄";
+}
+
+/* ===== MOVE NO BUTTON ===== */
+function moveButton(){
+  let btn = document.getElementById("noBtn");
+  btn.style.position = "absolute";
+  btn.style.top = Math.random()*80 + "%";
+  btn.style.left = Math.random()*80 + "%";
+}
+
+/* ===== LOVE LETTER TEXT (EDIT THIS PART) ===== */
+const letter = `My love,
+
+Every moment with you feels like magic.
+
+You make my world warmer, softer, and brighter.
+
+I am so lucky to love you.
+
+Today and always, I choose you.
+
+Forever yours ❤️`;
+
+/* ===== TYPEWRITER ===== */
+function showLetter(){
+  goToPage(4);
+  let i = 0;
+  let speed = 40;
+  let text = document.getElementById("letterText");
+  text.innerHTML = "";
+
+  function typing(){
+    if(i < letter.length){
+      text.innerHTML += letter.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    } else {
+      smallExplosion();
+    }
+  }
+  typing();
+}
+
+/* ===== SMALL HEART BURST ===== */
+function smallExplosion(){
+  for(let i=0;i<30;i++){
+    let heart = document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"%";
+    heart.style.top="80%";
+    heart.style.fontSize=(Math.random()*20+15)+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),3000);
+  }
+}
+
+/* ===== MASSIVE FINAL EXPLOSION ===== */
+function megaExplosion(){
+  for(let i=0;i<100;i++){
+    let heart = document.createElement("div");
+    heart.innerHTML="❤️";
+    heart.style.position="fixed";
+    heart.style.left="50%";
+    heart.style.top="50%";
+    heart.style.fontSize=(Math.random()*35+20)+"px";
+
+    let x=(Math.random()-0.5)*1200;
+    let y=(Math.random()-0.5)*1200;
+
+    heart.style.transform=`translate(${x}px,${y}px)`;
+    heart.style.transition="all 2.5s ease-out";
+
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),2500);
+  }
+}
+
+/* ===== MUSIC TOGGLE ===== */
+function toggleMusic(){
+  let music=document.getElementById("bgMusic");
+  if(music.paused){ music.play(); }
+  else{ music.pause(); }
+}
+
+</script>
+
+</body>
+</html>
